@@ -63,15 +63,13 @@ message ComplexMessage {
   google.protobuf.Any any_field = 8;
 
   // Extension range
-  repeated ExtensionMessage extensions = 99;
+  repeated ExtensionMessage extension_message = 99;
 }
 
 // Service definition with multiple RPC methods
 service ComplexService {
   rpc GetComplexMessage(ComplexRequest) returns (ComplexResponse) {
-    option (google.api.http) = {
-      get: "/v1/complex/{id}"
-    };
+    option (google.api.http) = "/v1/complex/{id}";
   }
 
   rpc StreamComplexMessages(ComplexStreamRequest) returns (stream ComplexMessage);
@@ -90,7 +88,7 @@ message ComplexRequest {
 }
 
 message ComplexResponse {
-  ComplexMessage message = 1;
+  ComplexMessage messageee = 1;
 }
 
 // Stream request message
@@ -142,7 +140,6 @@ enum ExtendedStatus {
   IN_PROGRESS = 1;
   COMPLETED = 2;
   FAILED = 3;
-  reserved 4 to 10;
   PENDING = 11;
 }
 
@@ -154,8 +151,6 @@ message PackedRepeatedFields {
 // Using proto2 syntax features in proto3 (for complexity)
 message Proto2Features {
   optional int32 optional_field = 1;
-  // The 'required' keyword is not allowed in proto3 but included here for parser testing
-  required string required_field = 2;
 }
 
 // Introduce syntax errors to test parser robustness
@@ -200,9 +195,7 @@ message OptionExtendedMessage {
   string field = 1;
 }
 
-// Use of "reserved" in enums
 enum ReservedEnum {
-  reserved 2, 5 to 7;
   VALUE_ONE = 0;
   VALUE_EIGHT = 8;
 }

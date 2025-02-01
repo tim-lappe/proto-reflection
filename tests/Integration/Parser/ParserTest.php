@@ -6,8 +6,9 @@ namespace ProtoReflection\Test\Integration\Parser;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use ProtoReflection\Lexer\ProtoLexer;
-use ProtoReflection\Parser\Parser;
+use ProtoReflection\Lexer\Protobuf\ProtoLexer;
+use ProtoReflection\Lexer\Protobuf\TokenType;
+use ProtoReflection\Parser\ProtobufGrammar;
 
 class ParserTest extends TestCase
 {
@@ -20,9 +21,22 @@ class ParserTest extends TestCase
 
         $content = file_get_contents(__DIR__ . '/../Fixtures/complex.proto');
 
-        $parser = new Parser($content, new ProtoLexer());
-        $ast = $parser->parse();
+        $lexer = new ProtoLexer();
+        $lexer->setInput($content);
 
-        var_dump($ast);
+        $tokens = [];
+
+        while ($token = $lexer->moveNext()) {
+            if ($token->getType() === TokenType::T_LINE_COMMENT->value || $token->getType() === TokenType::T_BLOCK_COMMENT->value) {
+                continue;
+            }
+
+            $tokens[] = $token;
+        }
+
+        $grammar = new ProtobufGrammar();
+        $ast = $grammar->getAstBuilder()->generateAST($tokens);
+
+        die((string) $ast->getAST());
     }
 }

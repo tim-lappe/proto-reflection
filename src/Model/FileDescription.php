@@ -13,6 +13,12 @@ class FileDescription
     private array $enums = [];
     private array $options = [];
 
+    public function __construct(Syntax $syntax, string $package)
+    {
+        $this->syntax = $syntax;
+        $this->package = $package;
+    }
+
     public function getSyntax(): Syntax
     {
         return $this->syntax;

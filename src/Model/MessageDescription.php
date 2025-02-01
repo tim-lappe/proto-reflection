@@ -9,6 +9,11 @@ class MessageDescription
     private string $name;
     private array $fields = [];
 
+    public function __construct(string $name)
+    {
+        $this->name = $name;
+    }
+
     public function getName(): string
     {
         return $this->name;
